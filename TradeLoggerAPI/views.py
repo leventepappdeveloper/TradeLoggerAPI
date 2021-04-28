@@ -24,11 +24,18 @@ class LoginView(APIView):
         password = request.data['password']
         user = User.objects.filter(email=email).first()
 
+        response = Response()
+        response["Access-Control-Expose-Headers"] = '*'
+        token = ''
+        response["Authorization"] = "jwt=" + token;
+
         if user is None:
-            raise AuthenticationFailed('User not found!')
+            #raise AuthenticationFailed('User not found!')
+            return response
 
         if not user.check_password(password):
-            raise AuthenticationFailed('Incorrect password!')
+            #raise AuthenticationFailed('Incorrect password!')
+            return response
 
         payload = {
             'id': user.id,
@@ -39,14 +46,9 @@ class LoginView(APIView):
         # secret will need to go somewhere else
         token = jwt.encode(payload, 'secret', algorithm="HS256")
 
-        # we want to return this token via cookies
-        response = Response()
-
         # look into httponly here
         response.set_cookie(key='jwt', value=token, httponly=True)
-        response.data = {
-            'jwt': token
-        }
+        response["Authorization"] = "jwt=" + token;
 
         return response
 

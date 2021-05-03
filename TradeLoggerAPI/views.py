@@ -47,8 +47,8 @@ class LoginView(APIView):
         token = jwt.encode(payload, 'secret', algorithm="HS256")
 
         # look into httponly here
-        response.set_cookie(key='jwt', value=token, httponly=True)
-        response["Authorization"] = "jwt=" + token;
+        response.set_cookie(key='TradeLoggerAuthCookie', value=token, httponly=True)
+        response["Authorization"] = "jwt=" + token
 
         return response
 

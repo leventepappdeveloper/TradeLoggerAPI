@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'TradeLoggerAPI',
     'rest_framework',
+    'drf_yasg',
     'corsheaders'
 ]
 
@@ -134,3 +135,13 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 # allows front-end to get cookies
 CORS_ALLOW_CREDENTIALS = True
+
+SWAGGER_SETTINGS={
+    'SECURITY_DEFINITIONS': {
+        "Auth Token - Bearer {Token}": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

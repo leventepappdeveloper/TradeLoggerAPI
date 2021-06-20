@@ -22,12 +22,23 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Snippets API",
+      title="TradeLogger API",
       default_version='v1',
-      description="Test description",
-      terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="contact@snippets.local"),
-      license=openapi.License(name="BSD License"),
+      description="NOTE: A client-side web application consuming these endpoints is currently under development.\n\n"
+                  "PROJECT SUMMARY \n\n"
+                  "TradeLogger API exposes a number of endpoints that allow traders to log and analyze their trades in "
+                  "order to improve future trading performance. The primary motivation for this project is to allow "
+                  "myself as well as fellow traders to make more informed (primarily options) trading decisions "
+                  "by learning from past successes and mistakes.\n\n"
+                  "CONFIGURATION STEPS \n\n"
+                  "1. Register a new TradeLogger User using the /auth/register endpoint. \n"
+                  "2. Upon successful registration, log in using the /auth/login endpoint. \n"
+                  "3. Upon successful login, copy the Authorization response header "
+                  "(including the \"Bearer\" prefix). \n"
+                  "4. In the top right corner of the page, click \"Authorize\", and paste the entire string copied in "
+                  "(3) into the \"Value\" field (again, the value pasted should consist of the token plus the "
+                  "\"Bearer\" prefix - e.g. \"Bearer someRandomAuthToken\"). \n"
+                  "5. You are ready to start testing the rest of the API endpoints."
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),

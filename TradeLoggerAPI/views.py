@@ -1,12 +1,10 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from rest_framework.exceptions import AuthenticationFailed
 from .serializers import UserSerializer
 from rest_framework.response import Response
-from .models import User
-import jwt, datetime
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from TradeLoggerAPI.Utils.AuthenticationUtils import *
 
 # Create your views here.
 # extends APIView that has post and get methods
@@ -46,22 +44,7 @@ class LoginView(APIView):
 
     @swagger_auto_schema(operation_description=loginSwaggerDescription, request_body=loginSwaggerSchema)
     def post(self, request):
-        username = request.data['username']
-        password = request.data['password']
-        user = User.objects.filter(username=username).first()
-
-        if user is None:
-            raise AuthenticationFailed('User not found!')
-        if not user.check_password(password):
-            raise AuthenticationFailed('Incorrect password!')
-
-        # Build JWT Token - valid for 60 seconds
-        payload = {
-            'id': user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-            'iat': datetime.datetime.utcnow()
-        }
-        token = jwt.encode(payload, 'secret', algorithm="HS256")
+        token = issueJWTToken(request)
 
         # Add Bearer token auth header to response message
         response = Response()
@@ -69,22 +52,27 @@ class LoginView(APIView):
 
         return response
 
+class UnregisterView(APIView):
+    def post(self, request):
+        try:
+            # in future iterations, we might want to remove all items corresponding to id from all tables
+            payload = validateJWTToken(request)
+            ret = User.objects.filter(id=payload['id']).delete()
+        except:
+            raise Exception('Failed to unregister user')
+
+        return Response(ret)
+
 class UserView(APIView):
     def get(self, request):
-        token = request.META.get('HTTP_AUTHORIZATION')
-        if not token:
-            raise AuthenticationFailed('No authorization token found. Unauthenticated!')
-
-        try:
-            # remove "BEARER " part from token, and get its payload
-            token = token[7:]
-            payload = jwt.decode(token, 'secret', algorithms=["HS256"])
-        except:
-            raise AuthenticationFailed('Invalid authorization token provided. Unauthenticated!')
+        payload = validateJWTToken(request)
 
         # find User object in the db corresponding to the "id" found
         # in the JWT token (and serialize JSON User object)
         user = User.objects.filter(id=payload['id']).first()
-        serializer = UserSerializer(user)
 
+        if not user:
+            raise AuthenticationFailed('Invalid authorization token provided. Unauthenticated!')
+
+        serializer = UserSerializer(user)
         return Response(serializer.data)

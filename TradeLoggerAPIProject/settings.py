@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'nmf7&^k*g!9_u8bq87n7xb4kc@y(+@if32@y##$ck@wq=g&8h1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['trade-logger-api.herokuapp.com', '127.0.0.1']
 
@@ -141,7 +141,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 SWAGGER_SETTINGS={
     'SECURITY_DEFINITIONS': {
-        "Auth Token - Bearer {Token}": {
+        "Bearer Token": {
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

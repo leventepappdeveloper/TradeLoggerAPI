@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import RegisterView, LoginView, UserView, UnregisterView
+from .views import RegisterView, LoginView, UserView, UnregisterView, CreateTradingAccountView
 
 urlpatterns = [
     # accepts all endpoints of TradeLoggerAPI
@@ -8,4 +8,5 @@ urlpatterns = [
     path('auth/login', LoginView.as_view()),
     path('auth/user', UserView.as_view()),
     path('auth/unregister', UnregisterView.as_view()),
+    path('trading/createtradingaccount', CreateTradingAccountView.as_view()),
 ]

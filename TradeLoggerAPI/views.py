@@ -1,10 +1,11 @@
-from django.shortcuts import render
+'''from django.shortcuts import render
 from rest_framework.views import APIView
 from .serializers import UserSerializer
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from TradeLoggerAPI.Utils.AuthenticationUtils import *
+from .models import TradingAccount
 
 # Create your views here.
 # extends APIView that has post and get methods
@@ -76,3 +77,28 @@ class UserView(APIView):
 
         serializer = UserSerializer(user)
         return Response(serializer.data)
+
+class CreateTradingAccountView(APIView):
+    tradingAccountSwaggerSchemaParameters = {'trading_account_name': openapi.Schema(type=openapi.TYPE_STRING,
+                                                               description=""),
+                                            'trading_account_description': openapi.Schema(type=openapi.TYPE_STRING,
+                                                               description=""),
+                                             'starting_balance': openapi.Schema(type=openapi.TYPE_STRING,
+                                                                                           description="")
+                                             }
+
+    tradingAccountSwaggerSchema = openapi.Schema(type=openapi.TYPE_OBJECT,
+                                                 properties=tradingAccountSwaggerSchemaParameters)
+
+
+    @swagger_auto_schema(operation_description="description", request_body=tradingAccountSwaggerSchema)
+    def post(self, request):
+        payload = validateJWTToken(request)
+
+        trading_account_instance = TradingAccount(trading_account_name=request.data['trading_account_name'],
+                             trading_account_description=request.data['trading_account_description'],
+                             starting_balance=request.data['starting_balance'],
+                             current_balance=request.data['starting_balance'],
+                             user_id_id=payload['id'])
+        trading_account_instance.save()
+        return Response("Your trading account has been successfully created")'''

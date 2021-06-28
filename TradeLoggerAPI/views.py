@@ -1,4 +1,4 @@
-from django.shortcuts import render
+'''from django.shortcuts import render
 from rest_framework.views import APIView
 from .serializers import UserSerializer
 from rest_framework.response import Response
@@ -101,4 +101,4 @@ class CreateTradingAccountView(APIView):
                              current_balance=request.data['starting_balance'],
                              user_id_id=payload['id'])
         trading_account_instance.save()
-        return Response("Your trading account has been successfully created")
+        return Response("Your trading account has been successfully created")'''
